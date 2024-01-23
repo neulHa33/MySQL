@@ -79,7 +79,7 @@ where first_name like '%S%' or '%s%';
 */
 select department_name
 from departments
-order by length(department_name) desc;
+order by char_length(department_name) desc;
 
 /*
 문제9.
