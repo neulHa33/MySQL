@@ -126,17 +126,16 @@ select d.department_id 부서번호,
        c.country_name 나라이름,
        r.region_name 지역이름
 from departments d
-left outer join employees m on m.employee_id = d.manager_id
+join employees m on m.employee_id = d.manager_id
 left outer join locations l on d.location_id = l.location_id
 left outer join countries c on l.country_id = c.country_id
-left outer join regions r on r.region_id = c.country_id
-where m.first_name is not null;
+left outer join regions r on r.region_id = c.country_id;
 
 # 문제9.
 -- 각 사원(employee)에 대해서 사번(employee_id), 이름(first_name), 부서명
 -- (department_name), 매니저(manager)의 이름(first_name)을 조회하세요.
 -- 부서가 없는 직원(Kimberely)도 표시합니다.
--- 매니저가 없는 Steven도 표시합니다.(106명)
+-- 매니저가 없는 Steven도 표시합니다.(107명)
 select e.employee_id 사번,
        e.first_name 이름,
 	   d.department_name 부서명,
@@ -147,15 +146,14 @@ left outer join departments d on e.department_id = d.department_id;
 
 # 문제9-1.
 -- 문제9 에서 부서가 없는 직원(Kimberely)도 표시하고.
--- 매니저가 없는 Steven도 표시하지 않습니다. (107명)
+-- 매니저가 없는 Steven도 표시하지 않습니다. (106명)
 select e.employee_id 사번,
        e.first_name 이름,
 	   d.department_name 부서명,
        m.first_name 메니저이름
 from employees e
-left outer join employees m on e.manager_id = m.employee_id
-left outer join departments d on e.department_id = d.department_id
-where m.first_name is not null;
+join employees m on e.manager_id = m.employee_id
+left outer join departments d on e.department_id = d.department_id;
 
 # 문제9-2.
 -- 문제9 에서 부서가 없는 직원(Kimberely)도 표시하지 않고
@@ -164,7 +162,6 @@ select e.employee_id 사번,
        e.first_name 이름,
 	   d.department_name 부서명,
        m.first_name 메니저이름
-from employees e
-left outer join employees m on e.manager_id = m.employee_id
-left outer join departments d on e.department_id = d.department_id
-where m.first_name is not null and d.department_name is not null;
+from employees e, employees m, departments d
+where e.manager_id = m.employee_id 
+and e.department_id = d.department_id;
