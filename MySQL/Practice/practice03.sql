@@ -129,7 +129,7 @@ from departments d
 join employees m on m.employee_id = d.manager_id
 left outer join locations l on d.location_id = l.location_id
 left outer join countries c on l.country_id = c.country_id
-left outer join regions r on r.region_id = c.country_id;
+left outer join regions r on r.region_id = c.region_id;
 
 # 문제9.
 -- 각 사원(employee)에 대해서 사번(employee_id), 이름(first_name), 부서명
