@@ -1,5 +1,10 @@
 # 문제1
 # 매니저가 있는 직원은 몇 명입니까? 
+
+-- 풀이1 : count(manager_id)는 null값 포함x
+select count(manager_id) as haveMngCnt
+from employees;
+-- 풀이2 : count(*)는 null값 포함
 select count(*) as haveMngCnt
 from employees e
 where manager_id is not null; 
@@ -14,7 +19,7 @@ from employees;
 
 # 문제3
 # 마지막으로 신입사원이 들어온 날은 언제 입니까? 다음 형식으로 출력해주세요.
-select concat(date_format(max(hire_date), '%Y'), '년', date_format(max(hire_date), '%m'), '월', date_format(max(hire_date), '%d'), '일')
+select date_format(max(hire_date), '%Y년 %m월 %d일') as '마지막으로 신입사원이 들어온 날'
 from employees;
 
 # 문제4
@@ -33,13 +38,13 @@ order by department_id desc;
 # (정렬순서는 최소임금 2500 구간일때 확인해볼 것)
 
 select job_id 업무아이디,
-       round(avg(salary), 0) 평균임금,
+       avg(salary) 평균임금,
        max(salary) 최고임금,
 	   min(salary) 최저임금
 from employees
 group by job_id
 order by min(salary) desc,
-		 avg(salary) asc;
+		 round(avg(salary), 0) asc;
          
 # 문제6.
 # 가장 오래 근속한 직원의 입사일은 언제인가요? 다음 형식으로 출력해주세요.
@@ -102,7 +107,8 @@ select employee_id,
 		  when date_format(hire_date, '%Y') = 2004 then '04년입사'
           else '상장이후입사'
      end optDate
-from employees;
+from employees
+order by hire_date asc;
 
 
 # 문제11 - 필요한 함수를 검색하고 사용법을 주석으로 남겨두세요
