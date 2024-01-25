@@ -74,17 +74,6 @@ select e.employee_id 직원번호,
        e.first_name 이름,
        e.salary 월급,
        e.department_id 부서번호
-from employees e inner join (select max(salary) salary
-				        from employees
-						group by department_id) s
-on e.salary = s.salary 
-order by e.salary desc;
-
-
-select e.employee_id 직원번호,
-       e.first_name 이름,
-       e.salary 월급,
-       e.department_id 부서번호
 from employees e ,(select max(salary) salary
 				   from employees
 				   group by department_id) s
@@ -108,20 +97,20 @@ from jobs j, (select job_id, sum(salary) salary
 			  from employees
               group by job_id) e
 where j.job_id = e.job_id
-order by salary desc;
-		
+order by salary desc;		
 
 # 문제7.
 -- 자신의 부서 평균 월급보다 월급(salary)이 많은 직원의 직원번호(employee_id), 이름
 -- (first_name)과 월급(salary)을 조회하세요(38건)
-select employee_id 직원번호,
-       first_name 이름,
-       salary 월급
-from employees
-where salary > any (select avg(salary)
+select e.employee_id 직원번호,
+       e.first_name 이름,
+       e.salary 월급
+from employees e, (select avg(salary) salary, department_id
                     from employees
-					group by department_id);
-
+					group by department_id) s
+where e.department_id = s.department_id
+and e.salary > s.salary;
+                    
 # 문제8
 -- 직원 입사일이 11번째에서 15번째의 직원의 사번, 이름, 월급, 입사일을 입사일 순서로 출력하세요.
 select employee_id 사번,
@@ -131,3 +120,4 @@ select employee_id 사번,
 from employees
 order by hire_date asc
 limit 10, 5;
+
