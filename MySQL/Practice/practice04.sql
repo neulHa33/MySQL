@@ -57,17 +57,33 @@ order by salary desc;
 -- (salary) 부서번호(department_id)를 조회하세요
 -- 단 조회결과는 월급의 내림차순으로 정렬되어 나타나야 합니다.
 -- 조건절비교, 테이블조인 2가지 방법으로 작성하세요(11건)
+# 1) 조건절비교
 select employee_id 직원번호,
        first_name 이름,
        salary 월급,
        department_id 부서번호
 from employees
-where (salary, department_id) in (select max(salary), 
-                                         department_id
+where (salary, department_id) in (select max(salary), department_id
                                   from employees
                                   group by department_id)
 order by salary desc;
 
+# 2) 테이블조인
+select e.employee_id 직원번호,
+       e.first_name 이름,
+       e.salary 월급,
+       e.department_id 부서번호
+from employees e, (select max(salary) salary, 
+					      department_id
+                   from employees
+                   group by department_id) s
+where e.salary = s.salary and e.department_id = s.department_id
+order by e.salary desc;
+
+select max(salary) salary, 
+	   department_id
+from employees
+group by department_id;
 
 # 문제6.
 -- 각 업무(job) 별로 월급(salary)의 총합을 구하고자 합니다. 
