@@ -57,47 +57,27 @@ order by salary desc;
 -- (salary) 부서번호(department_id)를 조회하세요
 -- 단 조회결과는 월급의 내림차순으로 정렬되어 나타나야 합니다.
 -- 조건절비교, 테이블조인 2가지 방법으로 작성하세요(11건)
-# 1
 select employee_id 직원번호,
        first_name 이름,
        salary 월급,
        department_id 부서번호
 from employees
-where (salary, department_id) in (select max(salary), department_id
+where (salary, department_id) in (select max(salary), 
+                                         department_id
                                   from employees
                                   group by department_id)
 order by salary desc;
 
-# 2
-/*
-select e.employee_id 직원번호,
-       e.first_name 이름,
-       e.salary 월급,
-       e.department_id 부서번호
-from employees e ,(select max(salary) salary
-				   from employees
-				   group by department_id) s
-where e.salary = s.salary 
-order by e.salary desc;
-*/
 
 # 문제6.
 -- 각 업무(job) 별로 월급(salary)의 총합을 구하고자 합니다. 
 -- 월급 총합이 가장 높은 업무부터 업무명(job_title)과 월급 총합을 조회하시오(19건)
-#월급 총합 조회
-/*
-select job_id, sum(salary)
-from employees
-group by job_id
-order by sum(salary) desc;
-*/
-
-select j.job_title, j.job_id, e.salary
-from jobs j, (select job_id, sum(salary) salary
-			  from employees
-              group by job_id) e
-where j.job_id = e.job_id
-order by salary desc;		
+select job_title 업무명,
+	   sum(salary) 월급총합
+from jobs j, employees e
+where e.job_id = j.job_id
+group by e.job_id
+order by 월급총합 desc;		
 
 # 문제7.
 -- 자신의 부서 평균 월급보다 월급(salary)이 많은 직원의 직원번호(employee_id), 이름
@@ -105,11 +85,14 @@ order by salary desc;
 select e.employee_id 직원번호,
        e.first_name 이름,
        e.salary 월급
-from employees e, (select avg(salary) salary, department_id
-                    from employees
-					group by department_id) s
-where e.department_id = s.department_id
-and e.salary > s.salary;
+from employees e, (select avg(salary) salary,
+						  department_id
+                   from employees
+                   group by department_id
+				   ) m
+where e.department_id = m.department_id
+and e.salary > m.salary;
+
                     
 # 문제8
 -- 직원 입사일이 11번째에서 15번째의 직원의 사번, 이름, 월급, 입사일을 입사일 순서로 출력하세요.
@@ -120,4 +103,10 @@ select employee_id 사번,
 from employees
 order by hire_date asc
 limit 10, 5;
+
+
+
+
+
+     
 
